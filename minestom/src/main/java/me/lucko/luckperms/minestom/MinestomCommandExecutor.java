@@ -35,7 +35,10 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
+import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
@@ -74,7 +77,9 @@ public class MinestomCommandExecutor extends CommandManager {
 
         private void execute(CommandSender sender, CommandContext context) {
             Sender wrapped = plugin.getSenderFactory().wrap(sender);
-            List<String> arguments = ArgumentTokenizer.EXECUTE.tokenizeInput(context.getInput());
+            String input = context.getInput().contains(" ") ? context.get("args") : "";
+
+            List<String> arguments = ArgumentTokenizer.EXECUTE.tokenizeInput(input);
             executeCommand(wrapped, context.getCommandName(), arguments);
         }
     }
@@ -86,7 +91,9 @@ public class MinestomCommandExecutor extends CommandManager {
 
             setSuggestionCallback((sender, context, suggestion) -> {
                 Sender wrapped = plugin.getSenderFactory().wrap(sender);
-                List<String> arguments = ArgumentTokenizer.TAB_COMPLETE.tokenizeInput(context.getInput());
+                String input = context.getInput().contains(" ") ? context.get("args") : "";
+
+                List<String> arguments = ArgumentTokenizer.TAB_COMPLETE.tokenizeInput(input);
                 tabCompleteCommand(wrapped, arguments).forEach(s -> suggestion.addEntry(new SuggestionEntry(s)));
             });
         }
@@ -94,6 +101,11 @@ public class MinestomCommandExecutor extends CommandManager {
         @Override
         public String parse(CommandSender sender, String input) throws ArgumentSyntaxException {
             return input;
+        }
+
+        @Override
+        public byte @Nullable [] nodeProperties() {
+            return NetworkBuffer.makeArray(NetworkBuffer.VAR_INT, 2); // Greedy phrase
         }
 
         @Override
