@@ -166,8 +166,7 @@ public class LPMinestomPlugin extends AbstractLuckPermsPlugin {
                     .setPlayerProvider((connection, gameProfile) -> new LuckPermsPlayer(
                             connection,
                             gameProfile,
-                            LuckPermsProvider.get(),
-                            getApiProvider().getPlayerAdapter(Player.class)
+                            LuckPermsProvider.get()
                     ));
         }
     }

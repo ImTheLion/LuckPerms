@@ -24,12 +24,11 @@ public class LuckPermsPlayer extends Player {
     public LuckPermsPlayer(
             PlayerConnection playerConnection,
             GameProfile gameProfile,
-            LuckPerms luckPerms,
-            PlayerAdapter<Player> playerAdapter
+            LuckPerms luckPerms
     ) {
         super(playerConnection, gameProfile);
         this.luckPerms = luckPerms;
-        this.playerAdapter = playerAdapter;
+        this.playerAdapter = luckPerms.getPlayerAdapter(Player.class);
     }
 
     /**
