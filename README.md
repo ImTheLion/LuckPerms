@@ -46,6 +46,8 @@ If you chose to enable the PlayerProvider, you can now cast any player to access
 You may also opt to use the LuckPerms API directly, or make a custom player class, which either contains the same methods
 or extends the LuckPermsPlayer class.
 
+Some inspiration was taken from [LooFifteen/LuckPerms](https://github.com/LooFifteen/LuckPerms)'s Minestom port.
+
 ---
 
 LuckPerms is a permissions plugin for Minecraft servers. It allows server admins to control what features players can use by creating groups and assigning permissions.

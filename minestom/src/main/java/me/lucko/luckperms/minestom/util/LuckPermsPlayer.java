@@ -36,7 +36,7 @@ public class LuckPermsPlayer extends Player {
      *
      * @return the LuckPerms {@link User}
      */
-    private User getLuckPermsUser() {
+    public User getLuckPermsUser() {
         return this.playerAdapter.getUser(this);
     }
 
@@ -45,7 +45,7 @@ public class LuckPermsPlayer extends Player {
      *
      * @return The Metadata
      */
-    private CachedMetaData getLuckPermsMetaData() {
+    public CachedMetaData getLuckPermsMetaData() {
         return getLuckPermsUser().getCachedData().getMetaData();
     }
 
