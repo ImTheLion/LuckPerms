@@ -5,6 +5,49 @@
 [![Maven Central](https://img.shields.io/maven-metadata/v/https/repo1.maven.org/maven2/net/luckperms/api/maven-metadata.xml.svg?label=maven%20central&colorB=brightgreen)](https://search.maven.org/artifact/net.luckperms/api)
 [![Discord](https://img.shields.io/discord/241667244927483904.svg?label=discord&logo=discord)](https://discord.gg/luckperms)
 
+# Minestom
+
+This is a port of LuckPerms for Minestom. The library is currently not published. As such 
+usage will require the following steps:
+- Clone the repository locally.
+- run ./gradlew publish (this will publish to maven local)
+
+In the project you want to use the library you must then:
+- Add mavenLocal as a repository (gradle):
+  ```kotlin
+    repositories {
+        mavenLocal()
+    }
+  ```
+- Then add LuckPerms as a dependency (example: gradle kotlin):
+  ```kotlin
+  dependencies {
+      implementation('me.lucko.luckperms:luckperms-minestom:<version>') {
+          artifact {
+              classifier = "all"
+          }
+      }
+  }
+  ```
+  The version is currently ``5.5-SNAPSHOT``, though this may change at any time and this value may not be up-to-date.
+
+## Usage
+In order to use the library in Minestom, you can use the LuckPermsBuilder:
+```java
+LuckPerms plugin = LuckPermsBuilder.builder(workingDirectory)
+        .usePlayerProvider(true) // Optionally use the built-in player provider
+        .enable();
+```
+
+If you chose to enable the PlayerProvider, you can now cast any player to access their permissions:
+```java
+((LuckPermsPlayer) player).hasPermission("example.permission");
+```
+You may also opt to use the LuckPerms API directly, or make a custom player class, which either contains the same methods
+or extends the LuckPermsPlayer class.
+
+---
+
 LuckPerms is a permissions plugin for Minecraft servers. It allows server admins to control what features players can use by creating groups and assigning permissions.
 
 The latest downloads, wiki & other useful links can be found on the project homepage at [luckperms.net](https://luckperms.net/).
