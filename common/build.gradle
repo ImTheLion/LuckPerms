@@ -114,3 +114,50 @@ dependencies {
     compileOnly 'org.yaml:snakeyaml:1.33'
     compileOnly 'net.luckperms:rest-api-java-client:0.1'
 }
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
+
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'luckperms-common'
+
+            from components.java
+
+            pom {
+                name = 'LuckPerms Common'
+                description = 'A permissions manager for Minecraft servers.'
+                url = 'https://luckperms.net'
+
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'lucko'
+                        name = 'Luck'
+                        url = 'https://lucko.me'
+                        email = 'git@lucko.me'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:https://github.com/ImTheLion/LuckPerms.git'
+                    developerConnection = 'scm:git:git@github.com:ImTheLion/LuckPerms.git'
+                    url = 'https://github.com/ImTheLion/LuckPerms'
+                }
+
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/ImTheLion/LuckPerms/issues'
+                }
+            }
+        }
+    }
+}
