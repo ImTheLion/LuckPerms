@@ -45,9 +45,12 @@ import me.lucko.luckperms.minestom.context.MinestomContextManager;
 import me.lucko.luckperms.minestom.context.MinestomPlayerCalculator;
 import me.lucko.luckperms.minestom.listeners.MinestomConnectionListener;
 import me.lucko.luckperms.minestom.messaging.MinestomMessagingFactory;
+import me.lucko.luckperms.minestom.util.LuckPermsPlayer;
 import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.query.QueryOptions;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
@@ -158,7 +161,15 @@ public class LPMinestomPlugin extends AbstractLuckPermsPlugin {
 
     @Override
     protected void performFinalSetup() {
-
+        if (bootstrap.usePlayerProvider()) {
+            MinecraftServer.getConnectionManager()
+                    .setPlayerProvider((connection, gameProfile) -> new LuckPermsPlayer(
+                            connection,
+                            gameProfile,
+                            LuckPermsProvider.get(),
+                            getApiProvider().getPlayerAdapter(Player.class)
+                    ));
+        }
     }
 
     @Override

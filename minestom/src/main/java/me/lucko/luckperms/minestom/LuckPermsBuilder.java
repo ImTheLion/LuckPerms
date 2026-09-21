@@ -25,7 +25,7 @@
 
 package me.lucko.luckperms.minestom;
 
-import me.lucko.luckperms.common.plugin.bootstrap.LuckPermsBootstrap;
+import me.lucko.luckperms.minestom.util.LuckPermsPlayer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.minestom.server.MinecraftServer;
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
-public sealed interface LuckpermsBuilder permits LuckpermsBuilder.BuilderImpl {
+public sealed interface LuckPermsBuilder permits LuckPermsBuilder.BuilderImpl {
 
     /**
      * Creates a LuckPerms builder, using which the luckperms plugin can be configured for use with Minestom.
@@ -42,7 +42,7 @@ public sealed interface LuckpermsBuilder permits LuckpermsBuilder.BuilderImpl {
      * @param dataDirectory The LuckPerms working directory.
      * @return The LuckPerms builder.
      */
-    static LuckpermsBuilder builder(Path dataDirectory) {
+    static LuckPermsBuilder builder(Path dataDirectory) {
         return new BuilderImpl(dataDirectory.toAbsolutePath());
     }
 
@@ -52,7 +52,15 @@ public sealed interface LuckpermsBuilder permits LuckpermsBuilder.BuilderImpl {
      * @param logger the logger use.
      * @return this, for chaining
      */
-    LuckpermsBuilder logger(Logger logger);
+    LuckPermsBuilder logger(Logger logger);
+
+    /**
+     * Sets whether to use a built-in {@link net.minestom.server.network.PlayerProvider}, to replace the standard
+     * {@link net.minestom.server.entity.Player} with {@link LuckPermsPlayer}. This is recommended for ease of use
+     * when you are not registering a custom player class yourself. If you are implementing one, you may choose to
+     * copy the methods to your own implementation, or extend the class.
+     */
+    LuckPermsBuilder usePlayerProvider(boolean use);
 
     /**
      * Enables the luckperms plugin.
@@ -61,20 +69,27 @@ public sealed interface LuckpermsBuilder permits LuckpermsBuilder.BuilderImpl {
      */
     LuckPerms enable();
 
-    final class BuilderImpl implements LuckpermsBuilder {
+    final class BuilderImpl implements LuckPermsBuilder {
 
         // Let the user explicitly set the data directory for luckperms to use.
         // This makes sure the user knows where the configs are located.
         private final Path dataDirectory;
         private Logger logger = LoggerFactory.getLogger("LuckPerms");
+        private boolean usePlayerProvider = false;
 
         private BuilderImpl(Path dataDirectory) {
             this.dataDirectory = dataDirectory;
         }
 
         @Override
-        public LuckpermsBuilder logger(Logger logger) {
+        public LuckPermsBuilder logger(Logger logger) {
             this.logger = logger;
+            return this;
+        }
+
+        @Override
+        public LuckPermsBuilder usePlayerProvider(boolean use) {
+            this.usePlayerProvider = use;
             return this;
         }
 
@@ -82,6 +97,7 @@ public sealed interface LuckpermsBuilder permits LuckpermsBuilder.BuilderImpl {
         public LuckPerms enable() {
             LPMinestomBootstrap bootstrap = new LPMinestomBootstrap(
                     this.logger,
+                    this.usePlayerProvider,
                     this.dataDirectory
             );
 

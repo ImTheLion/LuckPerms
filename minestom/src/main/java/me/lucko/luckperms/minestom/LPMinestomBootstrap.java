@@ -49,6 +49,7 @@ import java.util.concurrent.CountDownLatch;
 public class LPMinestomBootstrap implements LuckPermsBootstrap {
 
     private final PluginLogger logger;
+    private final boolean usePlayerProvider;
     private final Path dataDirectory;
     private final SchedulerAdapter schedulerAdapter;
     private final ClassPathAppender classPathAppender;
@@ -60,12 +61,17 @@ public class LPMinestomBootstrap implements LuckPermsBootstrap {
     private final CountDownLatch loadLatch = new CountDownLatch(1);
     private final CountDownLatch enableLatch = new CountDownLatch(1);
 
-    public LPMinestomBootstrap(final Logger logger, final Path dataDirectory) {
+    public LPMinestomBootstrap(final Logger logger, final boolean usePlayerProvider, final Path dataDirectory) {
         this.logger = new Slf4jPluginLogger(logger);
+        this.usePlayerProvider = usePlayerProvider;
         this.dataDirectory = dataDirectory.toAbsolutePath();
         this.schedulerAdapter = new MinestomSchedulerAdapter(this);
         this.classPathAppender = new MinestomClassPathAppender();
         this.plugin = new LPMinestomPlugin(this);
+    }
+
+    public boolean usePlayerProvider() {
+        return usePlayerProvider;
     }
 
     // provide adapters
