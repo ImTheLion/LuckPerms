@@ -78,7 +78,8 @@ public interface Platform {
         NEOFORGE("NeoForge"),
         FORGE("Forge"),
         STANDALONE("Standalone"),
-        HYTALE("Hytale");
+        HYTALE("Hytale"),
+        MINESTOM("Minestom");
 
         private final String friendlyName;
 

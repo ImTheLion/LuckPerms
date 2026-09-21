@@ -138,7 +138,7 @@ public class LPMinestomBootstrap implements LuckPermsBootstrap {
 
     @Override
     public Platform.Type getType() {
-        return Platform.Type.VELOCITY;
+        return Platform.Type.MINESTOM;
     }
 
     @Override
