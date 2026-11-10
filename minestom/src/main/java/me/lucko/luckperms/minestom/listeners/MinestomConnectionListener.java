@@ -126,6 +126,10 @@ public class MinestomConnectionListener extends AbstractConnectionListener {
     }
 
     public void onPlayerDisconnect(PlayerDisconnectEvent event) {
+        if (this.plugin.getConfiguration().get(ConfigKeys.DEBUG_LOGINS)) {
+            this.plugin.getLogger()
+                    .info("Processing disconnect for " + event.getPlayer().getUuid() + " - " + event.getPlayer().getUsername());
+        }
         handleDisconnect(event.getPlayer().getUuid());
     }
 
